@@ -69,6 +69,7 @@ The system is designed as a decision-support prototype and not as financial advi
 ```
 
 ##Features
+
 Multi-agent financial analysis
 Technical market analysis
 Fundamental analysis

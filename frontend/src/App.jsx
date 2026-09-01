@@ -93,14 +93,78 @@ const MOCK = {
   degraded_note: null,
 }
 
+function toList(v) {
+  if (Array.isArray(v))
+    return v.map((x) => (x && typeof x === 'object' ? Object.entries(x).map(([k, y]) => `${k}: ${y}`).join(', ') : String(x)))
+  if (v && typeof v === 'object')
+    return Object.entries(v).map(([k, y]) => `${k}: ${y}`)
+  if (v == null || v === '') return []
+  return [String(v)]
+}
+
+function txt(v, fallback = '') {
+  if (typeof v === 'string') return v
+  if (v == null) return fallback
+  return String(v)
+}
+
+function normalize(r) {
+  if (!r || typeof r !== 'object') return MOCK
+  return {
+    symbol: txt(r.symbol, MOCK.symbol),
+    price: Number(r.price) || MOCK.price,
+    change_pct: Number(r.change_pct) || 0,
+    signal: txt(r.signal, 'NEUTRAL'),
+    confidence: Number(r.confidence) || 0,
+    recommendation: txt(r.recommendation, '—'),
+    agents: Array.isArray(r.agents) && r.agents.length
+      ? r.agents.map((a) => ({
+          agent: txt(a.agent, 'Agent'),
+          signal: txt(a.signal, 'NEUTRAL'),
+          confidence: Number(a.confidence) || 0,
+          reason: txt(a.reason),
+          evidence: toList(a.evidence),
+        }))
+      : MOCK.agents,
+    synthesis: {
+      text: txt(r.synthesis && r.synthesis.text),
+      reasoning: toList(r.synthesis && r.synthesis.reasoning),
+    },
+    sources: Array.isArray(r.sources)
+      ? r.sources.map((s) => ({
+          file: txt(s.file || s.source, 'source'),
+          excerpt: txt(s.excerpt || s.text),
+        }))
+      : [],
+    portfolio: Array.isArray(r.portfolio)
+      ? r.portfolio.map((p) => ({ symbol: txt(p.symbol), pct: Number(p.pct) || 0 }))
+      : MOCK.portfolio,
+    watchlist: Array.isArray(r.watchlist)
+      ? r.watchlist.map((w) => ({ symbol: txt(w.symbol), signal: txt(w.signal, 'NEUTRAL') }))
+      : MOCK.watchlist,
+    metrics: {
+      latency_s: (r.metrics && r.metrics.latency_s) ?? 0,
+      signal_accuracy: (r.metrics && r.metrics.signal_accuracy) ?? 0,
+      risk_score: (r.metrics && r.metrics.risk_score) ?? 0,
+    },
+    degraded: !!(r.degraded),
+    degraded_note: r.degraded_note ?? null,
+  }
+}
+
 async function analyze(symbol, profile) {
-  const res = await fetch("http://127.0.0.1:8000/analyze", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ symbol, user_profile: profile.toLowerCase() }),
-  });
-  if (!res.ok) throw new Error("API error " + res.status);
-  return await res.json();
+  try {
+    const res = await fetch('http://127.0.0.1:8000/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ symbol, user_profile: profile.toLowerCase() }),
+    })
+    if (!res.ok) throw new Error('API ' + res.status)
+    return normalize(await res.json())
+  } catch (e) {
+    console.warn('API unavailable, using mock:', e.message)
+    return MOCK
+  }
 }
 
 /* ------------------------------------------------------------------ *
@@ -288,8 +352,8 @@ function App() {
                 <p className="reason">{a.reason}</p>
                 <div className="label">Evidence</div>
                 <ul className="evidence">
-                  {a.evidence.map((e) => (
-                    <li key={e}>{e}</li>
+                  {a.evidence.map((e, i) => (
+                    <li key={i}>{e}</li>
                   ))}
                 </ul>
               </article>

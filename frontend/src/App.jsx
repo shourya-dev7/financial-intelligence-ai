@@ -94,11 +94,13 @@ const MOCK = {
 }
 
 async function analyze(symbol, profile) {
-  // TODO: swap for the live call, e.g.
-  //   const r = await fetch(`/api/analyze?symbol=${symbol}&profile=${profile}`)
-  //   return r.json()
-  await new Promise((resolve) => setTimeout(resolve, 1500))
-  return MOCK
+  const res = await fetch("http://127.0.0.1:8000/analyze", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ symbol, user_profile: profile.toLowerCase() }),
+  });
+  if (!res.ok) throw new Error("API error " + res.status);
+  return await res.json();
 }
 
 /* ------------------------------------------------------------------ *

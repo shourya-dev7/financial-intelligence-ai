@@ -97,10 +97,11 @@ def analyze(request: dict):
             "signal": signal,
             "confidence": confidence,
             "reason": "Market signal engine result",
-            "evidence": market.get(
-                "signal_breakdown",
-                {}
-            )
+            "evidence": [
+                f"Momentum: {market.get('momentum', 'N/A')}",
+                f"Volume ratio: {market.get('volume_ratio', 'N/A')}",
+                f"Sentiment: {market.get('sentiment', 'N/A')}"
+            ]
         },
 
         {

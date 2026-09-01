@@ -88,23 +88,32 @@ CORS-enabled backend
 Interactive API testing through Swagger
 
 ##Tech Stack
+
 ###Frontend
+
 React
 JavaScript
 HTML
 CSS
+
 ###Backend
+
 Python
 FastAPI
 Uvicorn
+
 ###AI and Intelligence
+
 Multi-agent architecture
 Retrieval-Augmented Generation (RAG)
 Technical signal analysis
 Fundamental analysis
 Sentiment analysis
 Risk personalization
+
 ###Development
 Git
+GitHub
+VS Code
 GitHub
 VS Code

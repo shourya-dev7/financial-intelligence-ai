@@ -1,76 +1,109 @@
 # Financial Intelligence AI
 
-An AI-powered financial analysis platform that combines market signals, multi-agent reasoning, risk personalization, and retrieval-augmented generation (RAG) to provide explainable stock insights.
-
----
-
 ## Problem
 
-Investors often need to analyze multiple sources of information before making an investment decision.
+Financial analysis requires combining multiple factors such as market data, technical indicators, company fundamentals, news sentiment, and investor risk preferences.
 
-Market data, technical indicators, company fundamentals, news sentiment, and risk preferences are usually scattered across different sources.
+These sources are often scattered across different places, making financial analysis time-consuming and difficult to understand.
 
-This makes financial analysis time-consuming and difficult to interpret, especially for users with different risk profiles.
-
----
+Our project provides a unified platform that combines these signals and presents an explainable, risk-aware stock analysis.
 
 ## Solution
 
-Financial Intelligence AI brings these signals together into a single analysis pipeline.
+Financial Intelligence AI is an AI-powered financial analysis platform that combines market signals, multiple specialized agents, RAG-based information retrieval, and risk personalization.
 
-A user provides:
+The user provides a stock symbol and risk profile. The system analyzes the stock and returns:
 
-- Stock symbol
-- Risk profile
-
-The system analyzes the stock using multiple intelligence components and returns:
-
-- Market signal
+- Overall signal
 - Confidence score
 - Personalized recommendation
-- Agent-level reasoning
+- Technical analysis
+- Fundamental analysis
+- Sentiment analysis
 - Supporting evidence
-- Portfolio/watchlist information
+- Sources
+- Portfolio information
+- Watchlist information
 - Risk metrics
+- Explainable reasoning
 
-The system is designed to make financial analysis more explainable rather than simply producing a BUY/SELL-style result.
-
----
+The system is designed as a decision-support prototype and not as financial advice.
 
 ## Architecture
 
 ```text
-                    User
-                      |
-                      v
-                React Frontend
-                      |
-                      | POST /analyze
-                      v
-                FastAPI Backend
-                      |
-          +-----------+-----------+
-          |           |           |
-          v           v           v
-     Technical   Fundamental   Sentiment
-       Agent        Agent        Agent
-          |           |           |
-          +-----------+-----------+
-                      |
-                      v
-              Market Signal Engine
-                      |
-                      v
-                 RAG Layer
-                      |
-                      v
-              Synthesis / Decision
-                      |
-                      v
-             Risk Personalization
-                      |
-                      v
-                JSON Response
-                      |
-                      v
-                  Frontend
+                         USER
+                           |
+                           v
+                    React Frontend
+                           |
+                           | POST /analyze
+                           v
+                    FastAPI Backend
+                           |
+          +----------------+----------------+
+          |                |                |
+          v                v                v
+     Technical        Fundamental       Sentiment
+       Agent             Agent            Agent
+          |                |                |
+          +----------------+----------------+
+                           |
+                           v
+                 Market Signal Engine
+                           |
+                           v
+                           RAG
+                           |
+                           v
+                  Signal Synthesis
+                           |
+                           v
+                 Risk Personalization
+                           |
+                           v
+                  Structured JSON
+                           |
+                           v
+                    React Frontend
+```
+
+##Features
+Multi-agent financial analysis
+Technical market analysis
+Fundamental analysis
+News and sentiment analysis
+Market signal generation
+Retrieval-Augmented Generation (RAG)
+Risk-profile personalization
+Explainable reasoning
+Evidence-based analysis
+Confidence scoring
+Risk scoring
+Portfolio information
+Watchlist information
+FastAPI REST API
+CORS-enabled backend
+Interactive API testing through Swagger
+
+##Tech Stack
+###Frontend
+React
+JavaScript
+HTML
+CSS
+###Backend
+Python
+FastAPI
+Uvicorn
+###AI and Intelligence
+Multi-agent architecture
+Retrieval-Augmented Generation (RAG)
+Technical signal analysis
+Fundamental analysis
+Sentiment analysis
+Risk personalization
+###Development
+Git
+GitHub
+VS Code
